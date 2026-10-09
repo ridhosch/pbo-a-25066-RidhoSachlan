@@ -17,8 +17,8 @@
 > Kelas utama untuk menjalankan program, menguji instansiasi objek rekening, serta melakukan simulasi transaksi setoran dan penarikan saldo.
 
 **Bukti Eksekusi (Screenshot):**
-- **Before** : ![before](\img\java\MainJavaBefore.png)
-- **After**  : ![after](\img\java\MainJavaAfter.png)
+- **Before** : ![before](img/java/MainJavaBefore.png)
+- **After**  : ![after](img/java/MainJavaAfter.png)
 
 ### 1.2. File: `RekeningBank.java`
 
@@ -26,12 +26,12 @@
 > Merepresentasikan rekening bank. mengatur nomor rekening, nama pemilik, saldo, serta validasi aturan bisnis seperti pencegahan penarikan melebihi saldo atau saldo minimum.
 
 **Bukti Eksekusi (Screenshot):**
-- **Before** : ![before](\img\java\RekeningBankJavaBefore.png)
-- **After**  : ![after](\img\java\RekeningBankJavaAfter.png)
+- **Before** : ![before](img/java/RekeningBankJavaBefore.png)
+- **After**  : ![after](img/java/RekeningBankJavaAfter.png)
 
 ### Output
 
-![Output Java](\img\java\OutputJava.png)
+![Output Java](img/java/OutputJava.png)
 
 ---
 
@@ -42,8 +42,8 @@
 **Penjelasan Kode:**
 > Menjalankan skenario rekening bank di PHP, membuat objek rekening bank, dan menguji fungsi-fungsi transaksi finansial.
 **Bukti Eksekusi (Screenshot):**
-- **Before** : ![before](\img\php\mainPHPbefore.png)
-- **After**  : ![after](\img\php\mainPHPafter.png)
+- **Before** : ![before](img/php/mainPHPbefore.png)
+- **After**  : ![after](img/php/mainPHPafter.png)
 
 ### 2.2. File: `RekeningBank.php`
 
@@ -51,12 +51,12 @@
 > Implementasi rekening bank PHP dengan konstruktor, anggota static, konstanta, validasi saldo dan transaksi, serta method untuk setor, tarik, biaya administrasi, dan bunga.
 
 **Bukti Eksekusi (Screenshot):**
-- **Before** :  ![before](\img\php\RekeningBankPHPbefore.png)
-- **After**  :  ![after](\img\php\RekeningBankPHPafter.png)
+- **Before** :  ![before](img/php/RekeningBankPHPbefore.png)
+- **After**  :  ![after](img/php/RekeningBankPHPafter.png)
 
 ### Output
 
-![Output PHP](\img\php\OutputPHP.png)
+![Output PHP](img/php/OutputPHP.png)
 
 ---
 
