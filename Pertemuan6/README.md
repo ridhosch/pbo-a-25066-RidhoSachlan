@@ -70,7 +70,7 @@
 
 ### Output
 
-![Output Java](\img\java\OutputJava.png)
+![Output Java](img/java/OutputJava.png)
 
 ---
 
@@ -98,7 +98,7 @@
 
 **Output Program:**
 
-![Output PHP](/img/php/OutputPHP.png)
+![Output PHP](img/php/OutputPHP.png)
 
 ---
 
