@@ -98,9 +98,7 @@
 
 **Output Program:**
 
-Simpan tangkapan layar hasil eksekusi PHP pada `screenshots/output-php.png`, lalu tampilkan menggunakan Markdown berikut:
-
-![Output PHP](\img\php\OutputPHP.png)
+![Output PHP](/img/php/OutputPHP.png)
 
 ---
 
