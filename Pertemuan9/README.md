@@ -1,216 +1,147 @@
-# Praktikum Sesi 9 — Package, Namespace, dan Build Tool
+# LAPORAN PRAKTIKUM PEMROGRAMAN BERBASIS OBJEK
 
-**Sub-CPMK-P6 — Mahasiswa mampu menstrukturkan proyek dengan package/namespace serta mengelola dependensi menggunakan Maven dan Composer. (P3)**
-
-**Keterkaitan teori:** Pertemuan 9 — Package, Namespace, dan Build Tool  
-**Durasi:** 170 menit (1 SKS praktikum) · **Bobot:** 5% dari nilai praktikum  
-**Bahasa:** Java 25 dan PHP 8.4+
-
-> Versi cetak modul ini: [`Modul-Praktikum-09-package-namespace-dan-build-tool.docx`](Modul-Praktikum-09-package-namespace-dan-build-tool.docx). Kerangka kode: [`starter/`](starter/).
+| Informasi Praktikan | Keterangan |
+| :--- | :--- |
+| **Nama** | Ridho Sachlan |
+| **NPM** | 4525210066 |
+| **Kelas** | A |
+| **Mata Kuliah** | Pemrograman Berbasis Objek (PBO) |
+| **Pertemuan** | 09 - Package, Namespace, dan Build Tool |
+| **Tanggal** | Kamis, 29 Oktober 2026 |
 
 ---
 
-## A. Tujuan sesi
+## 1. Implementasi Java
 
-1. Merestrukturisasi proyek datar menjadi proyek Maven dan proyek Composer yang benar.
-2. Menerapkan penamaan package domain terbalik dan autoload PSR-4.
-3. Menambahkan dan memakai satu dependensi eksternal pada masing-masing proyek.
-4. Memastikan tidak ada satu pun artefak build yang ter-commit.
+Proyek Java direstrukturisasi menjadi proyek **Maven** dengan package `id.ac.univpancasila.perpustakaan` (sub-package `model`, `service`, `util`). Dependensi eksternal yang dipakai adalah **ascii-table** (`com.github.freva:ascii-table:1.8.0`).
 
-## B. Alat dan bahan
+### 1.1. File: `App.java`
 
-- Maven 3.9+ dan Composer 2.x (hasil sesi 1).
-- Kode Sistem Perpustakaan dari sesi 7 — inilah yang akan direstrukturisasi.
-- Akses internet untuk mengunduh dependensi. Jika lab tidak punya akses, gunakan cermin lokal yang disediakan asisten.
+**Penjelasan Kode:**
+> Titik masuk (entry point) aplikasi Sistem Perpustakaan yang berada di package `id.ac.univpancasila.perpustakaan`. Kelas ini mengimpor kelas antar-package (`model`, `service`, `util`) dan pustaka eksternal `AsciiTable`. Alurnya: menambah koleksi `Buku` beserta `Bab` (komposisi), mendaftarkan `Anggota`, mensimulasikan peminjaman dan pengembalian terlambat melalui `PerpustakaanService`, lalu menampilkan tabel koleksi, tabel transaksi, dan rincian denda memakai `AsciiTable.getTable(...)`.
 
-## C. Berkas starter
+**Bukti Eksekusi (Screenshot):**
+- **Source code**: ![App.java](img/java/AppJava.png)
 
-Salin ke folder tugas Anda; **jangan** menyunting berkas aslinya. Setiap komentar `TODO` harus Anda lengkapi sendiri — kode yang disalin dari sumber lain akan terlihat pada sesi demo.
+### 1.2. File: `Buku.java`
 
-| Berkas | Keterangan |
-|---|---|
-| `starter/java/pom.xml` | pom.xml dengan TODO pada groupId, artifactId, dan dependensi. |
-| `starter/java/struktur.txt` | Peta struktur folder Maven yang harus Anda bentuk. |
-| `starter/php/composer.json` | composer.json dengan TODO pada autoload PSR-4. |
-| `starter/.gitignore` | Versi lengkap termasuk target/ dan vendor/. |
+**Penjelasan Kode:**
+> Entitas buku pada package `...perpustakaan.model`. Menerapkan enkapsulasi (atribut `private final`) dan relasi **komposisi** terhadap kelas dalam `Bab`, yang hanya bisa dibuat lewat `tambahBab()`. Menyediakan pengelolaan stok (`tersedia()`, `kurangiStok()`, `tambahStok()`) serta validasi jumlah eksemplar tidak boleh negatif.
 
-## D. Langkah kerja
+**Bukti Eksekusi (Screenshot):**
+- **Source code**: ![Buku.java](img/java/BukuJava.png)
 
-Kerjakan berurutan. Jangan melanjutkan ke langkah berikutnya sebelum checkpoint terpenuhi.
+### 1.3. File: `Anggota.java`
 
-### Langkah 1 — Membentuk struktur folder Maven
+**Penjelasan Kode:**
+> Entitas anggota perpustakaan pada package `...perpustakaan.model`. Menyimpan `nomorAnggota`, `nama`, dan `jenisKeanggotaan` (Mahasiswa/Dosen) secara immutable, dengan validasi bahwa nomor anggota dan nama tidak boleh kosong.
 
-- Buat folder sesi-09/java/ dan di dalamnya bentuk struktur baku Maven. Hafalkan struktur ini — Spring Boot pada sesi 14 memakai yang sama persis.
-- Pindahkan kode Perpustakaan dari sesi 7 ke dalam src/main/java/, dengan package id.ac.univpancasila.perpustakaan dan sub-package model, service, exception.
-- Nama package HARUS sama persis dengan jalur foldernya. Ini bukan konvensi, melainkan aturan bahasa.
+**Bukti Eksekusi (Screenshot):**
+- **Source code**: ![Anggota.java](img/java/AnggotaJava.png)
 
-**Struktur folder**
+### 1.4. File: `Peminjaman.java`
 
-```
-sesi-09/java/
-├── pom.xml
-└── src/main/java/id/ac/univpancasila/perpustakaan/
-    ├── App.java
-    ├── model/     (Buku.java, Anggota.java, Peminjaman.java)
-    └── service/   (LibraryService.java)
-```
+**Penjelasan Kode:**
+> Entitas transaksi peminjaman pada package `...perpustakaan.model`. Menghubungkan `Anggota` dan `Buku`, menghitung `tanggalJatuhTempo` dari `tanggalPinjam` ditambah `lamaHari`, serta mencatat `tanggalKembali` (bernilai `null` selama buku belum dikembalikan).
 
-> **Checkpoint —** Setiap berkas .java diawali baris package yang cocok dengan lokasinya.
+**Bukti Eksekusi (Screenshot):**
+- **Source code**: ![Peminjaman.java](img/java/PeminjamanJava.png)
 
-### Langkah 2 — Melengkapi pom.xml dan membangun proyek
+### 1.5. File: `PerpustakaanService.java`
 
-- Lengkapi TODO pada pom.xml: groupId, artifactId, versi, dan maven.compiler.release.
-- Bangun proyek dan jalankan.
+**Penjelasan Kode:**
+> Lapisan layanan pada package `...perpustakaan.service` yang berisi logika bisnis: mengelola koleksi dan anggota, memproses `pinjam()` (validasi anggota, buku, stok, dan batas maksimal 3 pinjaman aktif), `kembalikan()`, serta `hitungDenda()` dengan tarif Rp1.000/hari untuk mahasiswa dan Rp500/hari untuk dosen. Kelas ini mengimpor kelas dari package `model`.
 
-**Terminal**
+**Bukti Eksekusi (Screenshot):**
+- **Source code**: ![PerpustakaanService.java](img/java/PerpustakaanServiceJava.png)
 
-```bash
-cd sesi-09/java
-mvn clean compile
-mvn exec:java -Dexec.mainClass=id.ac.univpancasila.perpustakaan.App
-```
+### 1.6. File: `Format.java`
 
-> **Checkpoint —** BUILD SUCCESS, dan program berjalan dari folder target/classes.
+**Penjelasan Kode:**
+> Kelas utilitas pada package `...perpustakaan.util` (konstruktor `private`, kelas `final`) untuk memformat nilai Rupiah (`formatRupiah`) dan tanggal berbahasa Indonesia (`formatTanggal`) dengan locale `id-ID`.
 
-### Langkah 3 — Menambahkan dependensi eksternal (Java)
+**Bukti Eksekusi (Screenshot):**
+- **Source code**: ![Format.java](img/java/FormatJava.png)
 
-- Tambahkan satu dependensi yang benar-benar Anda pakai. Saran: sebuah pustaka kecil untuk format tabel di terminal, atau pustaka tanggal.
-- Setelah menambah dependensi, jalankan mvn dependency:tree dan simpan keluarannya ke sesi-09/dependency-tree.txt.
-- Pakai minimal satu fungsi dari pustaka itu di dalam App.java. Dependensi yang ditambahkan tetapi tidak dipakai tidak dinilai.
-
-**Terminal**
-
-```bash
-mvn dependency:tree > ../dependency-tree.txt
-mvn clean compile
-```
-
-> **Checkpoint —** dependency-tree.txt menampilkan pustaka yang Anda tambahkan, dan App.java benar-benar memanggilnya.
-
-### Langkah 4 — Membentuk proyek Composer dengan autoload PSR-4
-
-- Buat sesi-09/php/ dengan struktur src/Model/, src/Service/, src/Exception/.
-- Lengkapi TODO pada composer.json: pemetaan namespace Perpustakaan\ ke src/.
-- Hapus SELURUH require_once dari kode Anda. Setelah PSR-4 aktif, satu baris require vendor/autoload.php di titik masuk sudah cukup.
-
-**Terminal**
-
-```bash
-cd ../php
-composer install
-php main.php
-```
-
-> **Checkpoint —** Program berjalan tanpa satu pun require_once selain vendor/autoload.php.
-
-### Langkah 5 — Menambahkan dependensi eksternal (PHP)
-
-- Tambahkan satu dependensi dan pakai fungsinya. Saran: nesbot/carbon untuk pengelolaan tanggal peminjaman dan jatuh tempo.
-- Perhatikan berkas composer.lock yang terbentuk. Bacalah beberapa barisnya.
-
-**Terminal**
-
-```bash
-composer require nesbot/carbon
-php main.php
-```
-
-> **Checkpoint —** Tanggal jatuh tempo dihitung memakai pustaka eksternal, bukan aritmetika manual.
-
-### Langkah 6 — Percobaan: merusak pemetaan namespace
-
-- Buat sesi-09/percobaan.md.
-- Ubah namespace satu kelas dari Perpustakaan\Model menjadi Perpustakaan\Domain TANPA memindahkan berkasnya. Jalankan. Catat pesan kesalahannya.
-- Lalu perbaiki dengan memindahkan berkas ke folder yang sesuai. Catat langkah perbaikannya.
-- Lakukan hal serupa pada Java: ubah baris package satu kelas tanpa memindahkan berkas. Catat pesan kompilatornya.
-
-> **Checkpoint —** percobaan.md memuat dua pesan kesalahan asli beserta langkah perbaikannya.
-
-### Langkah 7 — Memastikan repositori bersih
-
-- Perbarui .gitignore dengan versi lengkap dari starter.
-- Jalankan git status. Folder target/ dan vendor/ TIDAK boleh muncul.
-- Jika sebelumnya sudah terlanjur ter-commit, bersihkan dengan git rm -r --cached.
-- composer.lock WAJIB di-commit. Jelaskan alasannya di percobaan.md.
-
-**Terminal**
-
-```bash
-git status
-git add .
-git commit -m "Sesi 9: restrukturisasi Maven dan Composer"
-git push
-```
-
-> **Checkpoint —** Repositori daring tidak memuat target/ maupun vendor/, tetapi memuat composer.lock.
-
-## E. Latihan mandiri di lab
-
-_Dikerjakan bila langkah kerja selesai lebih awal. Tidak wajib, tetapi menambah nilai pada aspek penerapan konsep._
-
-1. Ubah versi dependensi PHP Anda dari ^2.0 menjadi ~2.0. Jalankan composer update dan amati perbedaannya di composer.lock.
-2. Buat sub-package util berisi satu kelas utilitas format rupiah, lalu pakai dari App. Perhatikan baris import/use yang muncul.
-
-## F. Tugas rumah
-
-1. Restrukturisasi SELURUH kode Anda dari sesi 2 sampai 7 ke dalam kedua proyek ini. Setelah sesi 9, hanya struktur inilah yang dipakai sampai akhir semester.
-2. Tulis sesi-09/README.md berisi cara membangun dan menjalankan kedua proyek, seolah-olah ditujukan untuk orang yang belum pernah melihat proyek Anda.
-
-## G. Luaran yang dikumpulkan
-
-Seluruh luaran diserahkan melalui repositori Git pribadi Anda, dengan riwayat commit yang menunjukkan proses pengerjaan — bukan satu commit tunggal di akhir.
-
-| Berkas / folder | Keterangan |
-|---|---|
-| `sesi-09/java/` | Proyek Maven lengkap dengan pom.xml dan struktur src/main/java. |
-| `sesi-09/php/` | Proyek Composer dengan composer.json, composer.lock, dan autoload PSR-4. |
-| `sesi-09/dependency-tree.txt` | Keluaran mvn dependency:tree. |
-| `sesi-09/percobaan.md` | Dua percobaan merusak pemetaan namespace/package beserta perbaikannya. |
-| `sesi-09/README.md` | Petunjuk membangun dan menjalankan. |
-
-## H. Rubrik penilaian sesi ini
-
-| Aspek | Bobot | Kriteria |
-|---|---|---|
-| Kebenaran fungsional | 35% | Seluruh perintah pada langkah kerja berjalan dan menghasilkan keluaran yang diminta. |
-| Penerapan konsep sesi ini | 30% | Konsep yang menjadi Sub-CPMK sesi ini diterapkan dengan tepat, bukan sekadar membuat program berjalan. |
-| Keterbacaan dan konvensi | 10% | Penamaan bermakna, format konsisten, komentar seperlunya, riwayat commit wajar. |
-| Demo dan pertanyaan lisan | 25% | Mampu menjelaskan setiap baris kode sendiri dan menjawab pertanyaan demo. MENGGUGURKAN: tanpa demo, tugas tidak dinilai. |
-
-## I. Pertanyaan demo
-
-> Pertanyaan berikut akan diajukan saat Anda mendemokan pekerjaan sesi ini. Daftar ini sengaja dibuka agar Anda mempersiapkan **pemahaman**, bukan hafalan. Anda boleh memakai alat bantu apa pun saat mengerjakan — tetapi kode yang tidak dapat Anda jelaskan sendiri tidak dinilai.
-
-1. Tunjukkan satu berkas Java Anda. Bagaimana saya tahu di folder mana berkas ini seharusnya berada, hanya dengan membaca baris pertamanya?
-2. Apa yang dilakukan Composer ketika saya menulis new Perpustakaan\Model\Buku()? Jelaskan langkah demi langkah.
-3. Mengapa vendor/ dan target/ tidak boleh di-commit, tetapi composer.lock harus?
-4. Tunjukkan dependensi eksternal yang Anda tambahkan, lalu tunjukkan baris kode yang memakainya.
-5. Apa arti penanda versi ^2.0 pada composer.json Anda? Versi 3.0 akan ikut terpasang atau tidak?
-6. Saya hapus folder vendor/ Anda sekarang. Apa yang harus Anda lakukan agar program berjalan lagi?
-7. Mengapa struktur src/main/java ini penting untuk dipahami sekarang, padahal kita baru memakai Spring Boot di sesi 14?
-
-## J. Kesalahan yang sering terjadi
-
-| Gejala | Penyebab yang lazim | Cara memperbaiki |
-|---|---|---|
-| ClassNotFoundException saat menjalankan Java | Nama package tidak cocok dengan struktur folder, atau mainClass salah ditulis. | Samakan package dengan folder. Tulis mainClass dengan nama lengkap termasuk package-nya. |
-| PHP: Class "Perpustakaan\Model\Buku" not found | Pemetaan PSR-4 salah, atau autoload belum dibangun ulang. | Periksa composer.json, lalu jalankan composer dump-autoload. Perhatikan huruf besar-kecil nama folder — di Linux itu berpengaruh. |
-| mvn: BUILD FAILURE — source option 25 is no longer supported | JAVA_HOME menunjuk ke JDK lama. | Perbaiki JAVA_HOME, buka terminal baru, jalankan mvn -v untuk memastikan. |
-| composer install gagal karena tidak ada internet | Lab tanpa akses keluar. | Gunakan cermin lokal yang disediakan asisten, atau jalankan composer dump-autoload --no-scripts untuk membangun autoload tanpa dependensi eksternal. |
-| target/ atau vendor/ tetap muncul di git status | Sudah terlanjur ter-commit sebelum .gitignore dipasang. | git rm -r --cached target vendor lalu commit ulang. |
-
-## Lembar verifikasi demo
-
-Diisi oleh dosen atau asisten pada saat demo. Tugas tanpa lembar terverifikasi tidak dinilai.
-
-|  |  |
-|---|---|
-| Nama / NIM |  |
-| Tanggal demo |  |
-| Nilai sesi ini |  |
-| Catatan penguji |  |
-| Paraf penguji |  |
 
 ---
 
-_Modul ini disusun 10 September 2026. Versi teknologi yang dirujuk (Java 25 LTS, PHP 8.4/8.5, Laravel 13, Spring Boot 4.1) diverifikasi pada tanggal tersebut dan perlu diperiksa ulang sebelum semester berjalan._
+## 2. Implementasi PHP
+
+Proyek PHP direstrukturisasi menjadi proyek **Composer** dengan namespace `Perpustakaan\` yang dipetakan ke folder `src/` melalui autoload **PSR-4**. Dependensi eksternal yang dipakai adalah **nesbot/carbon** untuk pengelolaan tanggal.
+
+### 2.1. File: `main.php`
+
+**Penjelasan Kode:**
+> Titik masuk aplikasi PHP. Seluruh `require_once` manual dihapus dan diganti satu baris `require __DIR__ . '/vendor/autoload.php'` sehingga kelas dimuat otomatis oleh autoload PSR-4. Program membuat koleksi buku, mendaftarkan anggota, mensimulasikan peminjaman dengan `Carbon`, pengembalian terlambat 5 hari, lalu mencetak daftar buku, daftar transaksi, dan rincian denda.
+
+**Bukti Eksekusi (Screenshot):**
+- **Source code**:
+ ![main.php](img/php/MainPHP.png)
+
+### 2.2. File: `Buku.php`
+
+**Penjelasan Kode:**
+> Entitas buku pada namespace `Perpustakaan\Model`. Menerapkan komposisi terhadap `Bab` dan pengelolaan stok eksemplar.
+
+**Bukti Eksekusi (Screenshot):**
+- **Source code**: 
+![Buku.php](img/php/BukuPHP.png)
+
+### 2.3. File: `Bab.php`
+
+**Penjelasan Kode:**
+> Kelas `final` pada namespace `Perpustakaan\Model` yang merepresentasikan bab dalam sebuah buku (`nomor` dan `judul`) memakai constructor property promotion `readonly`. Bagian dari relasi komposisi dengan `Buku`.
+
+**Bukti Eksekusi (Screenshot):**
+- **Source code**: 
+![Bab.php](img/php/BabPHP.png)
+
+### 2.4. File: `Anggota.php`
+
+**Penjelasan Kode:**
+> Entitas anggota perpustakaan pada namespace `Perpustakaan\Model` dengan properti `readonly` dan validasi nomor anggota serta nama tidak boleh kosong (melempar `InvalidArgumentException`).
+
+**Bukti Eksekusi (Screenshot):**
+- **Source code**: ![Anggota.php](img/php/AnggotaPHP.png)
+
+### 2.5. File: `Peminjaman.php`
+
+**Penjelasan Kode:**
+> Entitas transaksi peminjaman pada namespace `Perpustakaan\Model`. Memakai pustaka eksternal `Carbon` untuk menghitung tanggal jatuh tempo (`addDays`), bukan aritmetika tanggal manual.
+
+**Bukti Eksekusi (Screenshot):**
+- **Source code**: ![Peminjaman.php](img/php/PeminjamanPHP.png)
+
+### 2.6. File: `PerpustakaanService.php`
+
+**Penjelasan Kode:**
+> Lapisan layanan pada namespace `Perpustakaan\Service`. Memproses peminjaman (validasi anggota, buku, stok, batas 3 pinjaman aktif), pengembalian, dan perhitungan denda keterlambatan memakai `Carbon::diffInDays()`.
+
+**Bukti Eksekusi (Screenshot):**
+- **Source code**: ![PerpustakaanService.php](img/php/PerpustakaanServicePHP.png)
+
+### 2.7. File: `Format.php`
+
+**Penjelasan Kode:**
+> Kelas utilitas pada namespace `Perpustakaan\Util` untuk memformat nilai Rupiah (`formatRupiah`) dan tanggal berlokal Indonesia (`formatTanggal`) memakai `Carbon`.
+
+**Bukti Eksekusi (Screenshot):**
+- **Source code**: ![Format.php](img/php/FormatPHP.png)
+
+### 2.8. File: `composer.json`
+
+**Penjelasan Kode:**
+> Berkas konfigurasi Composer. Memetakan namespace `Perpustakaan\` ke folder `src/` pada bagian `autoload.psr-4`, serta mendeklarasikan dependensi `nesbot/carbon`. Berkas `composer.lock` ikut di-commit agar versi dependensi sama di semua mesin.
+
+### Output
+
+**Output Program:**
+
+![Output PHP](img/php/OutputPHP.png)
+
+---
+
+## 3. Kesimpulan
+
+Pada praktikum ini proyek Sistem Perpustakaan direstrukturisasi menjadi proyek Maven (Java) dan Composer (PHP). Pada Java, baris `package` di setiap berkas harus sama persis dengan jalur foldernya (`src/main/java/id/ac/univpancasila/perpustakaan/...`), dan kelas antar-package dipakai melalui `import`. Pada PHP, namespace `Perpustakaan\` dipetakan ke folder `src/` oleh autoload PSR-4, sehingga seluruh `require_once` manual cukup digantikan satu baris `vendor/autoload.php`.

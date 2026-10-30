@@ -53,6 +53,7 @@ public class App {
         LocalDate tglSekarang = LocalDate.of(2026, 10, 20);
         Peminjaman p1 = service.pinjam("A-2024001", "B-001", tglSekarang, 14);
         Peminjaman p2 = service.pinjam("D-1985010", "B-003", tglSekarang, 14);
+        System.out.println("Peminjaman p2: " + p2.getIdPeminjaman());
 
         // Simulasi pengembalian terlambat (p1 dikembalikan 5 hari setelah jatuh tempo)
         LocalDate tglKembaliP1 = p1.getTanggalJatuhTempo().plusDays(5);
