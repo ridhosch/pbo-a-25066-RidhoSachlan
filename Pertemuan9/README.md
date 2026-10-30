@@ -63,6 +63,14 @@ Proyek Java direstrukturisasi menjadi proyek **Maven** dengan package `id.ac.uni
 **Bukti Eksekusi (Screenshot):**
 - **Source code**: ![Format.java](img/java/FormatJava.png)
 
+### 1.7. File: `pom.xml`
+
+**Penjelasan Kode:**
+> Berkas konfigurasi Maven. Berisi koordinat proyek (`groupId` = `id.ac.univpancasila.perpustakaan`, `artifactId` = `perpustakaan`, `version` = `1.0.0`), `maven.compiler.release` = 25, dependensi eksternal `ascii-table 1.8.0`, dan plugin `exec-maven-plugin` agar program dapat dijalankan dengan `mvn exec:java`.
+
+### Output
+
+![Output Java](img/java/OutputJava.png)
 
 ---
 
@@ -76,8 +84,7 @@ Proyek PHP direstrukturisasi menjadi proyek **Composer** dengan namespace `Perpu
 > Titik masuk aplikasi PHP. Seluruh `require_once` manual dihapus dan diganti satu baris `require __DIR__ . '/vendor/autoload.php'` sehingga kelas dimuat otomatis oleh autoload PSR-4. Program membuat koleksi buku, mendaftarkan anggota, mensimulasikan peminjaman dengan `Carbon`, pengembalian terlambat 5 hari, lalu mencetak daftar buku, daftar transaksi, dan rincian denda.
 
 **Bukti Eksekusi (Screenshot):**
-- **Source code**:
- ![main.php](img/php/MainPHP.png)
+- **Source code**: ![main.php](img/php/MainPHP.png)
 
 ### 2.2. File: `Buku.php`
 
@@ -85,8 +92,7 @@ Proyek PHP direstrukturisasi menjadi proyek **Composer** dengan namespace `Perpu
 > Entitas buku pada namespace `Perpustakaan\Model`. Menerapkan komposisi terhadap `Bab` dan pengelolaan stok eksemplar.
 
 **Bukti Eksekusi (Screenshot):**
-- **Source code**: 
-![Buku.php](img/php/BukuPHP.png)
+- **Source code**: ![Buku.php](img/php/BukuPHP.png)
 
 ### 2.3. File: `Bab.php`
 
@@ -94,8 +100,7 @@ Proyek PHP direstrukturisasi menjadi proyek **Composer** dengan namespace `Perpu
 > Kelas `final` pada namespace `Perpustakaan\Model` yang merepresentasikan bab dalam sebuah buku (`nomor` dan `judul`) memakai constructor property promotion `readonly`. Bagian dari relasi komposisi dengan `Buku`.
 
 **Bukti Eksekusi (Screenshot):**
-- **Source code**: 
-![Bab.php](img/php/BabPHP.png)
+- **Source code**: ![Bab.php](img/php/BabPHP.png)
 
 ### 2.4. File: `Anggota.php`
 
@@ -145,3 +150,4 @@ Proyek PHP direstrukturisasi menjadi proyek **Composer** dengan namespace `Perpu
 ## 3. Kesimpulan
 
 Pada praktikum ini proyek Sistem Perpustakaan direstrukturisasi menjadi proyek Maven (Java) dan Composer (PHP). Pada Java, baris `package` di setiap berkas harus sama persis dengan jalur foldernya (`src/main/java/id/ac/univpancasila/perpustakaan/...`), dan kelas antar-package dipakai melalui `import`. Pada PHP, namespace `Perpustakaan\` dipetakan ke folder `src/` oleh autoload PSR-4, sehingga seluruh `require_once` manual cukup digantikan satu baris `vendor/autoload.php`.
+
