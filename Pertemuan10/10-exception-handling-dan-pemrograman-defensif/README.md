@@ -19,8 +19,13 @@
 > Kelas induk untuk semua exception di perpustakaan. Diturunkan dari `RuntimeException` (unchecked), jadi tidak perlu `throws` di setiap method. Dengan induk ini, semua error domain bisa ditangkap sekaligus lewat satu `catch (PerpustakaanException e)`.
 
 **Bukti Eksekusi (Screenshot):**
-- **Before** : ![before](/Pertemuan10/img/java/sebelum/PerpustakaanExcepJava.png)
-- **After** : ![after](/Pertemuan10/img/java/setelah/PerpustakaanExceptionJava.png)
+- **Before** :
+
+   ![before](/Pertemuan10/img/java/sebelum/PerpustakaanExcepJava.png)
+  
+- **After** :
+
+   ![after](/Pertemuan10/img/java/setelah/PerpustakaanExceptionJava.png)
 
 ### 1.2. File: `BukuTidakDitemukanException.java`
 
@@ -28,8 +33,13 @@
 > Dilempar kalau ISBN buku tidak ada di katalog. Exception ini menyimpan `isbn` sebagai atribut dan bisa diambil lewat `getIsbn()`, jadi datanya bisa dipakai lagi, tidak hanya sebagai teks pesan.
 
 **Bukti Eksekusi (Screenshot):**
-- **Before** : ![before](/Pertemuan10/img/java/sebelum/BukuTidakDitemukanExcepJava.png)
-- **After** : ![after](/Pertemuan10/img/java/setelah/BukuTidakDitemukanExceptionJava.png)
+- **Before** :
+  
+   ![before](/Pertemuan10/img/java/sebelum/BukuTidakDitemukanExcepJava.png)
+  
+- **After** :
+  
+   ![after](/Pertemuan10/img/java/setelah/BukuTidakDitemukanExceptionJava.png)
 
 ### 1.3. File: `AnggotaTidakDitemukanException.java`
 
@@ -37,8 +47,13 @@
 > Dilempar kalau ID anggota belum terdaftar. Menyimpan `idAnggota` dan punya getter `getIdAnggota()`.
 
 **Bukti Eksekusi (Screenshot):**
-- **Before** : ![before](/Pertemuan10/img/java/sebelum/AnggotaTidakDitemukanExceptionJava.png)
-- **After** : ![after](/Pertemuan10/img/java/setelah/AnggotaTidakDitemukanExceptionJava.png)
+- **Before** :
+  
+  ![before](/Pertemuan10/img/java/sebelum/AnggotaTidakDitemukanExceptionJava.png)
+ 
+- **After** :
+  
+  ![after](/Pertemuan10/img/java/setelah/AnggotaTidakDitemukanExceptionJava.png)
 
 ### 1.4. File: `BukuSedangDipinjamException.java`
 
@@ -46,8 +61,13 @@
 > Dilempar kalau stok buku habis. Menyimpan dua data, yaitu `isbn` dan `judul`, supaya pesan ke pengguna lebih jelas.
 
 **Bukti Eksekusi (Screenshot):**
-- **Before** : ![before](/Pertemuan10/img/java/sebelum/BukuSedangDipinjamExecpJava.png)
-- **After** : ![after](/Pertemuan10/img/java/setelah/BukuSedangDipinjamExcepJava.png)
+- **Before** :
+  
+   ![before](/Pertemuan10/img/java/sebelum/BukuSedangDipinjamExecpJava.png)
+ 
+- **After** :
+  
+   ![after](/Pertemuan10/img/java/setelah/BukuSedangDipinjamExcepJava.png)
 
 ### 1.5. File: `BatasPinjamTerlampauiException.java`
 
@@ -55,8 +75,13 @@
 > Dilempar kalau anggota sudah meminjam sampai batas maksimal (3 buku). Menyimpan `idAnggota` dan `batas`.
 
 **Bukti Eksekusi (Screenshot):**
-- **Before** : ![before](/Pertemuan10/img/java/sebelum/BatasPinjamanTerlampauiExcepJava.png)
-- **After** : ![after](/Pertemuan10/img/java/setelah/BatasPinjamanTerlampauiExcepJava.png)
+- **Before** :
+  
+  ![before](/Pertemuan10/img/java/sebelum/BatasPinjamanTerlampauiExcepJava.png)
+  
+- **After** :
+  
+  ![after](/Pertemuan10/img/java/setelah/BatasPinjamanTerlampauiExcepJava.png)
 
 ### 1.6. File: `LibraryServiceKotor.java`
 
@@ -64,8 +89,13 @@
 > Versi awal yang masih berantakan, sengaja tidak dihapus untuk pembanding. Method `pinjam()` punya `if` bersarang 4 tingkat dan setiap kegagalan hanya `return false`, sehingga tidak ketahuan penyebabnya. Di sini file hanya dipindah ke package `service` di proyek Maven.
 
 **Bukti Eksekusi (Screenshot):**
-- **Before** : ![before](/Pertemuan10/img/java/sebelum/LibraryServiceKotorJava.png)
-- **After** : ![after](/Pertemuan10/img/java/setelah/LibraryServiceKotorJava.png)
+- **Before** :
+  
+   ![before](/Pertemuan10/img/java/sebelum/LibraryServiceKotorJava.png)
+  
+- **After** :
+  
+  ![after](/Pertemuan10/img/java/setelah/LibraryServiceKotorJava.png)
 
 ### 1.7. File: `LibraryService.java`
 
@@ -79,7 +109,9 @@
 > Berisi menu input konsol supaya program tidak berhenti karena stack trace. Input kosong, huruf saat diminta angka, dan angka 0 atau negatif sudah dicek dan menampilkan pesan error. Pada `pinjamBuku()`, semua error domain ditangkap dengan satu `catch (PerpustakaanException e)`, lalu `instanceof` dipakai untuk mengambil data khusus tiap exception (isbn, id anggota, judul, atau batas).
 
 **Bukti Eksekusi (Screenshot):**
-- **Source code**: ![PerpustakaanService.java](/Pertemuan10/img/java/setelah/PerpustakaanServiceJava.png)
+- **Source code**:
+  
+  ![PerpustakaanService.java](/Pertemuan10/img/java/setelah/PerpustakaanServiceJava.png)
 
 ### 1.9. File: `Main.java`
 
@@ -102,7 +134,9 @@
 > Kelas induk exception di PHP, diturunkan dari `RuntimeException`. PHP tidak punya checked exception, jadi semuanya setara unchecked.
 
 **Bukti Eksekusi (Screenshot):**
-- **Source code**: ![PerpustakaanException.php](/Pertemuan10/img/php/PerpustakaanExcPHP.png)
+- **Source code**:
+  
+  ![PerpustakaanException.php](/Pertemuan10/img/php/PerpustakaanExcPHP.png)
 
 ### 2.2. File: `BukuTidakDitemukanException.php`
 
@@ -110,7 +144,9 @@
 > Dilempar kalau ISBN tidak ada. Menyimpan `$isbn` sebagai properti `readonly` dan punya getter `getIsbn()`.
 
 **Bukti Eksekusi (Screenshot):**
-- **Source code**: ![BukuTidakDitemukanException.php](/Pertemuan10/img/php/BukuTidakDitemukanExcPHP.png)
+- **Source code**:
+  
+   ![BukuTidakDitemukanException.php](/Pertemuan10/img/php/BukuTidakDitemukanExcPHP.png)
 
 ### 2.3. File: `AnggotaTidakDitemukanException.php`
 
@@ -118,7 +154,9 @@
 > Dilempar kalau ID anggota belum terdaftar. Menyimpan `$idAnggota` dan punya getter `getIdAnggota()`.
 
 **Bukti Eksekusi (Screenshot):**
-- **Source code**: ![AnggotaTidakDitemukanException.php](/Pertemuan10/img/php/AnggotaTidakDitemukanExceptionPHP.png)
+- **Source code**:
+  
+   ![AnggotaTidakDitemukanException.php](/Pertemuan10/img/php/AnggotaTidakDitemukanExceptionPHP.png)
 
 ### 2.4. File: `BukuSedangDipinjamException.php`
 
@@ -126,7 +164,9 @@
 > Dilempar kalau stok buku habis. Menyimpan `$isbn` dan `$judul`.
 
 **Bukti Eksekusi (Screenshot):**
-- **Source code**: ![BukuSedangDipinjamException.php](/Pertemuan10/img/php/BukuSedangDipinjamExcepPHP.png)
+- **Source code**:
+  
+  ![BukuSedangDipinjamException.php](/Pertemuan10/img/php/BukuSedangDipinjamExcepPHP.png)
 
 ### 2.5. File: `BatasPinjamTerlampauiException.php`
 
@@ -134,7 +174,9 @@
 > Dilempar kalau anggota sudah mencapai batas pinjam. Menyimpan `$idAnggota` dan `$batas`.
 
 **Bukti Eksekusi (Screenshot):**
-- **Source code**: ![BatasPinjamTerlampauiException.php](/Pertemuan10/img/php/BatasPinjamTerlampauiExcepPHP.png)
+- **Source code**:
+  
+   ![BatasPinjamTerlampauiException.php](/Pertemuan10/img/php/BatasPinjamTerlampauiExcepPHP.png)
 
 ### 2.6. File: `LibraryServiceKotor.php`
 
@@ -142,7 +184,9 @@
 > Versi PHP yang masih berantakan: `pinjam()` punya `if` bersarang 4 tingkat dan hanya `return false` tanpa alasan.
 
 **Bukti Eksekusi (Screenshot):**
-- **Source code**: ![LibraryServiceKotor.php](/Pertemuan10/img/php/LibraryServiceKotorPHP.png)
+- **Source code**:
+
+   ![LibraryServiceKotor.php](/Pertemuan10/img/php/LibraryServiceKotorPHP.png)
 
 ### 2.7. File: `LibraryService.php`
 
@@ -150,7 +194,9 @@
 > Hasil refactor dengan guard clause. `pinjam()` mengecek anggota, ISBN, stok, dan batas pinjam secara berurutan, dan langsung melempar exception kalau ada yang salah. Return type jadi `void` dan `@throws` ditulis sebagai dokumentasi.
 
 **Bukti Eksekusi (Screenshot):**
-- **Source code**: ![LibraryService.php](/Pertemuan10/img/php/LibraryServicePHP.png)
+- **Source code**:
+
+   ![LibraryService.php](/Pertemuan10/img/php/LibraryServicePHP.png)
 
 ### 2.8. File: `Main.php`
 
