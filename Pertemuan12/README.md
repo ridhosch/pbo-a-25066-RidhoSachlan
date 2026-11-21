@@ -1,164 +1,224 @@
-# Praktikum Sesi 12 — Refactoring dengan SOLID dan Repository Pattern
+# LAPORAN PRAKTIKUM PEMROGRAMAN BERBASIS OBJEK
 
-**Sub-CPMK-P8 — Mahasiswa mampu merefaktor kode agar patuh pada prinsip SOLID dan menerapkan Repository pattern dengan dependency injection manual. (P4, C4)**
-
-**Keterkaitan teori:** Pertemuan 12 — Prinsip SOLID dan Design Pattern Dasar  
-**Durasi:** 170 menit (1 SKS praktikum) · **Bobot:** 6% dari nilai praktikum  
-**Bahasa:** Java 25 dan PHP 8.4+
-
-> Versi cetak modul ini: [`Modul-Praktikum-12-refactoring-dengan-solid-dan-repository-pattern.docx`](Modul-Praktikum-12-refactoring-dengan-solid-dan-repository-pattern.docx). Kerangka kode: [`starter/`](starter/).
-
----
-
-## A. Tujuan sesi
-
-1. Menemukan pelanggaran SOLID pada kode sendiri, bukan pada contoh buatan.
-2. Memisahkan tanggung jawab penyimpanan dari aturan bisnis dengan Repository pattern.
-3. Menyuntikkan dependensi lewat constructor secara manual, tanpa framework.
-4. Membuktikan bahwa aturan bisnis kini dapat diuji tanpa penyimpanan sesungguhnya.
-
-## B. Alat dan bahan
-
-- Proyek hasil sesi 9–11, termasuk unit test yang sudah berjalan.
-
-## C. Berkas starter
-
-Salin ke folder tugas Anda; **jangan** menyunting berkas aslinya. Setiap komentar `TODO` harus Anda lengkapi sendiri — kode yang disalin dari sumber lain akan terlihat pada sesi demo.
-
-| Berkas | Keterangan |
-|---|---|
-| `starter/java/BookRepository.java` | Interface kontrak dengan TODO. |
-| `starter/java/InMemoryBookRepository.java` | Implementasi untuk pengujian, dengan TODO. |
-| `starter/java/AturanDenda.java` | Interface Strategy dengan TODO. |
-| `starter/php/repository.php` | Padanan PHP dengan TODO. |
-| `starter/REFACTORING-template.md` | Template tabel sebelum–sesudah yang harus Anda isi. |
-
-## D. Langkah kerja
-
-Kerjakan berurutan. Jangan melanjutkan ke langkah berikutnya sebelum checkpoint terpenuhi.
-
-### Langkah 1 — Audit SOLID atas kode sendiri
-
-- Buka LibraryService Anda dari sesi 10–11. Bacalah seperti orang lain yang baru melihatnya.
-- Isi bagian pertama REFACTORING.md: temukan MINIMAL TIGA pelanggaran SOLID. Untuk setiap temuan tuliskan: prinsip yang dilanggar, berkas dan baris, mengapa itu pelanggaran, dan akibatnya bila dibiarkan.
-- Petunjuk tempat mencari: kelas yang menyimpan data sekaligus mengatur aturan bisnis sekaligus mencetak keluaran (SRP); rantai if untuk jenis anggota (OCP); pembuatan objek penyimpanan langsung di dalam layanan (DIP).
-
-> **Checkpoint —** REFACTORING.md memuat tiga temuan dengan rujukan berkas dan baris yang nyata.
-
-### Langkah 2 — Menerapkan Repository pattern
-
-- Lengkapi interface BookRepository: cariByIsbn, cariSemua, simpan, kurangiStok.
-- Buat InMemoryBookRepository sebagai implementasinya.
-- Ubah LibraryService agar TIDAK LAGI membuat sendiri penyimpanannya. Ia menerima BookRepository lewat constructor.
-- Pastikan LibraryService tidak lagi menyebut satu pun kelas konkret penyimpanan.
-
-> **Checkpoint —** Kata "new" tidak muncul lagi di dalam LibraryService untuk urusan penyimpanan.
-
-### Langkah 3 — Menerapkan Strategy untuk aturan denda
-
-- Rantai if untuk jenis anggota (mahasiswa, dosen, kehormatan) diganti dengan interface AturanDenda dan tiga implementasinya.
-- Tambahkan AturanDendaFactory yang memilih implementasi berdasarkan jenis anggota.
-- Buktikan Open-Closed: tambahkan jenis keempat (misalnya alumni) TANPA menyunting satu baris pun pada LibraryService.
-
-> **Checkpoint —** Menambah aturan denda keempat hanya menambah satu berkas dan satu baris di factory.
-
-### Langkah 4 — Dependency injection manual
-
-- Di App (titik masuk program), rakit seluruh objek: buat repository, buat aturan denda, lalu suntikkan keduanya ke LibraryService.
-- Perhatikan bahwa App kini menjadi SATU-SATUNYA tempat kelas konkret disebut.
-- Catat di REFACTORING.md: berapa kelas yang perlu diubah bila penyimpanan diganti dari memori ke basis data? (Jawaban yang benar: satu berkas baru, satu baris di App.)
-
-> **Checkpoint —** Seluruh perakitan objek terjadi di App, dan tidak ada kelas lain yang membuat dependensinya sendiri.
-
-### Langkah 5 — Membuktikan manfaatnya lewat pengujian
-
-- Perbarui unit test dari sesi 11: kini LibraryService dapat diuji dengan InMemoryBookRepository, tanpa penyimpanan sesungguhnya.
-- Buat satu implementasi repository palsu tambahan yang SELALU melempar exception, lalu buktikan bahwa LibraryService menanganinya dengan benar.
-- Inilah bukti nyata Dependency Inversion: aturan bisnis dapat diuji terpisah dari penyimpanannya.
-
-**Terminal**
-
-```bash
-mvn test
-./vendor/bin/phpunit tests
-```
-
-> **Checkpoint —** Seluruh uji lulus, dan minimal satu uji memakai repository palsu.
-
-### Langkah 6 — Menuliskan yang sengaja TIDAK direfaktor
-
-- Bagian terakhir REFACTORING.md: sebutkan SATU tempat di kode Anda yang sengaja TIDAK Anda beri pattern, beserta alasannya.
-- Bagian ini dinilai sama beratnya dengan bagian refactoring. Kemampuan menahan diri dari over-engineering sama pentingnya dengan kemampuan menerapkan pattern.
-
-> **Checkpoint —** REFACTORING.md memuat satu keputusan untuk TIDAK memakai pattern, dengan alasan yang berpijak pada kebutuhan nyata.
-
-## E. Latihan mandiri di lab
-
-_Dikerjakan bila langkah kerja selesai lebih awal. Tidak wajib, tetapi menambah nilai pada aspek penerapan konsep._
-
-1. Terapkan Singleton pada salah satu kelas Anda, lalu coba tulis unit test untuknya. Rasakan kesulitannya. Kembalikan menjadi objek biasa yang di-inject, dan bandingkan.
-2. Cari satu interface di kode Anda yang punya lebih dari lima method. Pecah menjadi dua interface yang lebih kecil sesuai Interface Segregation.
-
-## F. Tugas rumah
-
-1. TUGAS 4 (mata kuliah teori) dikerjakan bersama sesi ini: analisis dan refactoring SOLID lengkap dengan REFACTORING.md.
-2. Persiapan sesi 13: pasang Laravel 13 di perangkat Anda. Jalankan composer create-project laravel/laravel:^13.0 latihan-laravel dan pastikan php artisan serve berhasil. Selesaikan SEBELUM sesi 13 — waktu lab tidak akan cukup untuk pemasangan.
-
-## G. Luaran yang dikumpulkan
-
-Seluruh luaran diserahkan melalui repositori Git pribadi Anda, dengan riwayat commit yang menunjukkan proses pengerjaan — bukan satu commit tunggal di akhir.
-
-| Berkas / folder | Keterangan |
-|---|---|
-| `BookRepository dan implementasinya` | Di kedua proyek. |
-| `AturanDenda dan tiga implementasi + factory` | Di kedua proyek. |
-| `LibraryService` | Versi yang menerima dependensi lewat constructor. |
-| `REFACTORING.md` | Tiga temuan SOLID, tabel sebelum–sesudah, dan satu keputusan untuk tidak memakai pattern. |
-| `Unit test yang diperbarui` | Termasuk satu uji dengan repository palsu. |
-
-## H. Rubrik penilaian sesi ini
-
-| Aspek | Bobot | Kriteria |
-|---|---|---|
-| Kebenaran fungsional | 35% | Seluruh perintah pada langkah kerja berjalan dan menghasilkan keluaran yang diminta. |
-| Penerapan konsep sesi ini | 30% | Konsep yang menjadi Sub-CPMK sesi ini diterapkan dengan tepat, bukan sekadar membuat program berjalan. |
-| Keterbacaan dan konvensi | 10% | Penamaan bermakna, format konsisten, komentar seperlunya, riwayat commit wajar. |
-| Demo dan pertanyaan lisan | 25% | Mampu menjelaskan setiap baris kode sendiri dan menjawab pertanyaan demo. MENGGUGURKAN: tanpa demo, tugas tidak dinilai. |
-
-## I. Pertanyaan demo
-
-> Pertanyaan berikut akan diajukan saat Anda mendemokan pekerjaan sesi ini. Daftar ini sengaja dibuka agar Anda mempersiapkan **pemahaman**, bukan hafalan. Anda boleh memakai alat bantu apa pun saat mengerjakan — tetapi kode yang tidak dapat Anda jelaskan sendiri tidak dinilai.
-
-1. Sebutkan satu pelanggaran SOLID yang Anda temukan di kode Anda sendiri. Tunjuk barisnya, lalu tunjuk versi perbaikannya.
-2. Di LibraryService Anda, di mana objek penyimpanan dibuat? Kalau jawabannya "tidak di sini", lalu di mana?
-3. Saya ingin mengganti penyimpanan dari memori ke basis data. Berkas apa saja yang harus saya ubah? Jangan dikerjakan — cukup sebutkan.
-4. Tambahkan aturan denda untuk alumni sekarang. Berapa berkas lama yang isinya berubah?
-5. Tunjukkan uji yang memakai repository palsu. Mengapa uji itu tidak mungkin ditulis sebelum refactoring?
-6. Bagian mana dari kode Anda yang sengaja TIDAK diberi pattern? Mengapa?
-7. Kalau saya memaksa Anda menambahkan Factory untuk membuat objek Buku, apa untung dan ruginya?
-
-## J. Kesalahan yang sering terjadi
-
-| Gejala | Penyebab yang lazim | Cara memperbaiki |
-|---|---|---|
-| LibraryService masih memanggil new untuk penyimpanan | Refactoring berhenti di pembuatan interface saja. | Pindahkan pembuatan objek ke App dan terima lewat constructor. |
-| Interface dibuat tetapi hanya punya satu implementasi selamanya | Abstraksi spekulatif. | Interface dibenarkan di sini karena dipakai untuk pengujian dengan implementasi palsu — pastikan implementasi kedua itu benar-benar ada. |
-| Factory berisi rantai if yang persis sama dengan sebelumnya | Rantai if hanya dipindahkan, bukan dihilangkan. | Itu masih dapat diterima: rantai kini terpusat di SATU tempat, bukan tersebar. Yang penting LibraryService bersih. |
-| Unit test rusak setelah refactoring | Constructor berubah tetapi uji belum disesuaikan. | Perbarui uji — itu memang bagian dari pekerjaan refactoring, bukan gangguan. |
-| REFACTORING.md hanya berisi daftar perubahan tanpa alasan | Menganggap dokumen sebagai formalitas. | Alasan adalah isi utamanya. Tanpa alasan, dokumen tidak dinilai. |
-
-## Lembar verifikasi demo
-
-Diisi oleh dosen atau asisten pada saat demo. Tugas tanpa lembar terverifikasi tidak dinilai.
-
-|  |  |
-|---|---|
-| Nama / NIM |  |
-| Tanggal demo |  |
-| Nilai sesi ini |  |
-| Catatan penguji |  |
-| Paraf penguji |  |
+| Informasi Praktikan | Keterangan |
+| :--- | :--- |
+| **Nama** | Ridho Sachlan |
+| **NPM** | 4525210066 |
+| **Kelas** | A |
+| **Mata Kuliah** | Pemrograman Berbasis Objek (PBO) |
+| **Pertemuan** | 12 — REFACTORING & DESIGN PATTERNS |
+| **Tanggal** | *Kamis, 19 November 2026* |
 
 ---
 
-_Modul ini disusun 10 September 2026. Versi teknologi yang dirujuk (Java 25 LTS, PHP 8.4/8.5, Laravel 13, Spring Boot 4.1) diverifikasi pada tanggal tersebut dan perlu diperiksa ulang sebelum semester berjalan._
+Pada modul praktikum pertemuan ke-12 ini, fokus utama pembelajaran adalah melakukan pembenahan struktur kode (*refactoring*) pada sistem manajemen perpustakaan berbasis Java dan PHP. Tujuan dari pembersihan kode ini adalah untuk menerapkan prinsip-prinsip *Clean Code* serta menyematkan beberapa pola desain (*Design Patterns*) standar industri tanpa merusak atau mengubah fungsionalitas bisnis yang sudah ada sebelumnya.
+
+Dua pola desain utama yang diterapkan meliputi:
+1. **Repository Pattern:** Memisahkan lapisan akses data (penyimpanan dan pencarian koleksi buku) dari logika layanan utama (*Business Logic*).
+2. **Strategy Pattern & Factory Pattern:** Mengeliminasi penggunaan percabangan logika `if-else` atau `switch` yang menumpuk dalam perhitungan denda keterlambatan, menggantinya dengan polimorfisme kelas-kelas strategi terenkapsulasi yang dikelola secara terpusat oleh sebuah *factory*.
+
+Berikut adalah penjabaran detail dari proses perombakan kode serta analisis file-file yang dikerjakan.
+
+---
+
+## 1. Implementasi Pemrograman Berbasis Objek Berbasis Java (Maven)
+
+Pada project Java yang menggunakan struktur *package* `id.ac.univpancasila.perpustakaan`, perbaikan kode dilakukan secara bertahap mulai dari antarmuka denda, pembuatan strategi denda turunan, pemisahan *repository*, hingga pengujian melalui eksekusi Maven.
+
+### 1.1. `AturanDenda.java`
+
+**Analisis & Penjelasan Kode:**
+
+Antarmuka (*interface*) `AturanDenda` bertindak sebagai kontrak utama yang mendefinisikan perilaku standar untuk kalkulasi denda keterlambatan pengembalian buku. Dengan menerapkan *Strategy Pattern*, kelas ini memastikan bahwa setiap algoritma perhitungan denda memiliki signature yang seragam, sehingga modul lain dapat memanggil fungsi terkait secara independen tanpa perlu tahu rincian implementasi di baliknya. Dua method esensial yang dideklarasikan adalah fungsi `hitung()` untuk kalkulasi nominal berdasarkan durasi keterlambatan, serta fungsi `nama()` untuk keperluan pelaporan antarmuka.
+
+**Keadaan Sebelum Refactoring:**
+
+File ini masih menyisakan catatan *TODO* sisa kerangka praktikum serta komentar panduan implementasi kode.
+
+![AturanDenda.java sebelum](/Pertemuan12\img\java\before\AturanDendaJavaBefore.png)
+
+**Keadaan Sesudah Refactoring:**
+
+Seluruh komentar *TODO* dibersihkan, menghasilkan struktur antarmuka yang bersih, ringkas, dan siap diimplementasikan oleh kelas strategi konkret.
+
+![AturanDenda.java sesudah](/Pertemuan12\img\java\after\AturanDendaJavaAfter.png)
+
+---
+
+### 1.2. `AturanDendaFactory.java`
+
+**Analisis & Penjelasan Kode:**
+
+Kelas pabrik (*Factory Class*) ini dirancang untuk mereduksi kopling ketat dengan menerapkan *Factory Design Pattern*. Alih-alih membuat objek strategi denda secara manual di berbagai tempat, fungsi statis `untuk(String jenisAnggota)` dalam kelas ini bertugas menerima parameter kategori keanggotaan, menormalkannya menggunakan fungsi pembersih string (`trim().toLowerCase()`), lalu mengembalikan instansiasi kelas strategi yang sesuai (seperti `DendaMahasiswa`, `DendaDosen`, dll.). Konstruktor dibuat privat untuk mencegah instansiasi objek yang tidak perlu.
+
+**Keadaan Sebelum Refactoring:**
+
+Merupakan file komponen baru yang ditambahkan pada sesi pertemuan 12 ini.
+
+**Keadaan Sesudah Refactoring:**
+
+![AturanDendaFactory.java sesudah](/Pertemuan12\img\java\after\AturanDendaFactoryAfter.png)
+
+---
+
+### 1.3. `DendaMahasiswa.java`
+
+**Analisis & Penjelasan Kode:**
+
+Kelas konkret turunan dari `AturanDenda` yang memuat logika spesifik tarif denda bagi kalangan mahasiswa, yakni senilai **Rp1.000 per hari keterlambatan**. Penggunaan fungsi pengaman `Math.max(0, hariTerlambat)` diterapkan guna menjamin bahwa input hari negatif (pengembalian lebih awal) tidak mengakibatkan kalkulasi denda bernilai negatif.
+
+**Keadaan Sebelum Refactoring:**
+
+Merupakan file komponen baru yang ditambahkan pada sesi pertemuan 12 ini.
+
+**Keadaan Sesudah Refactoring:**
+
+![DendaMahasiswa.java sesudah](/Pertemuan12\img\java\after\DendaMahasiswaJavaAfter.png)
+
+---
+
+### 1.4. `DendaDosen.java`
+
+**Analisis & Penjelasan Kode:**
+
+Serupa dengan strategi mahasiswa, kelas ini merepresentasikan kebijakan khusus golongan pengajar/dosen dengan tarif diskon khusus sebesar **Rp500 per hari**. Berkat penerapan antarmuka yang seragam, kelas layanan dapat bertukar strategi perhitungan ini secara dinamis.
+
+**Keadaan Sebelum Refactoring:**
+
+Merupakan file komponen baru yang ditambahkan pada sesi pertemuan 12 ini.
+
+**Keadaan Sesudah Refactoring:**
+
+![DendaDosen.java sesudah](/Pertemuan12\img\java\after\DendaDosenJavaAfter.png)
+
+---
+
+### 1.5. `DendaBebas.java`
+
+**Analisis & Penjelasan Kode:**
+
+Kelas strategi denda khusus yang diterapkan untuk anggota berstatus kehormatan. Implementasi method `hitung()` secara konsisten mengembalikan nilai `0.0` berapapun akumulasi hari keterlambatannya, mencerminkan fleksibilitas penanganan aturan bisnis yang bervariasi tanpa mengubah kode inti aplikasi.
+
+**Keadaan Sebelum Refactoring:**
+
+Merupakan file komponen baru yang ditambahkan pada sesi pertemuan 12 ini.
+
+**Keadaan Sesudah Refactoring:**
+
+![DendaBebas.java sesudah](/Pertemuan12\img\java\after\DendaBebasJavaAfter.png)
+
+---
+
+### 1.6. `DendaAlumni.java`
+
+**Analisis & Penjelasan Kode:**
+
+Keberadaan kelas ini membuktikan implementasi prinsip **Open-Closed Principle (OCP)** dari SOLID Design Principles. Ketika sistem harus mengakomodasi jenis anggota baru berupa alumni dengan tarif **Rp750 per hari**, pengembang tidak perlu memodifikasi kode kelas utama yang sudah berjalan, cukup membuat kelas strategi baru ini dan mendaftarkannya pada *factory*.
+
+**Keadaan Sebelum Refactoring:**
+
+Merupakan file komponen baru yang ditambahkan pada sesi pertemuan 12 ini.
+
+**Keadaan Sesudah Refactoring:**
+
+![DendaAlumni.java sesudah](/Pertemuan12\img\java\after\DendaAlumniJavaAfter.png)
+
+---
+
+### 1.7. `BookRepository.java`
+
+**Analisis & Penjelasan Kode:**
+
+*Interface* ini bertindak sebagai lapisan abstraksi data buku (*Data Access Abstraction*). Dengan mendefinisikan method standar seperti `simpan()`, `cariByIsbn()`, `cariSemua()`, dan `kurangiStok()`, kelas logika bisnis (*Service*) tidak bergantung pada teknologi penyimpanan fisik tertentu (apakah itu struktur memori lokal, berkas teks, ataupun basis data relasional SQL). Penggunaan pembungkus `Optional` pada pencarian ISBN juga meminimalisir risiko galat `NullPointerException`.
+
+**Keadaan Sebelum Refactoring:**
+
+Masih berupa kerangka kosong dengan anotasi komentar *TODO*.
+
+![BookRepository.java sebelum](/Pertemuan12\img\java\before\BookRepositoryJavaBefore.png)
+
+**Keadaan Sesudah Refactoring:**
+
+Kontrak method repositori tersusun lengkap dan terstandarisasi.
+
+![BookRepository.java sesudah](/Pertemuan12\img\java\after\BookRepositoruJavaAfter.png)
+
+---
+
+### 1.8. `InMemoryBookRepository.java`
+
+**Analisis & Penjelasan Kode:**
+
+Kelas ini merupakan implementasi nyata dari `BookRepository` yang memanfaatkan struktur data berbasis memori penampung `LinkedHashMap`. Pendekatan ini sangat efektif untuk keperluan pengujian unit (*unit testing*) dan simulasi sistem tanpa ketergantungan *database server* eksternal. Penggunaan fungsi `Collections.unmodifiableList` pada method `cariSemua()` juga menjamin keamanan integritas data koleksi agar tidak bisa dimodifikasi secara sembarangan dari luar kelas repositori.
+
+**Keadaan Sebelum Refactoring:**
+
+Masih berupa kerangka kelas mentah dengan struktur penyimpanan peta data yang belum diimplementasikan fungsinya.
+
+![InMemoryBookRepository.java sebelum](/Pertemuan12\img\java\before\InMemoryBookRepositoryJavaBefore.png)
+
+**Keadaan Sesudah Refactoring:**
+
+Seluruh logika manipulasi data memori tertulis secara komprehensif.
+
+![InMemoryBookRepository.java sesudah](/Pertemuan12\img\java\after\InMemoryBookRepositoryJavaAfter.png)
+
+---
+
+### Hasil Eksekusi Program Java
+
+Eksekusi perintah Maven (`mvn exec:java`) menampilkan sistem berjalan dengan sukses. Konsole memperlihatkan inisialisasi aktif aturan denda mahasiswa, validasi penolakan peminjaman untuk ID anggota yang belum terdaftar (mekanisme penanganan error berjalan normal), serta keberhasilan penambahan entri buku baru ke dalam sistem repositori.
+
+![Output Java](/Pertemuan12\img\java\OutputJava.png)
+
+---
+
+## 2. Implementasi Pemrograman Berbasis Objek Berbasis PHP
+
+Pada environment PHP, perbaikan arsitektur kode dilakukan dengan memecah file monolitik (`repository.php`) ke dalam struktur direktori modular `src/Repository` dengan penerapan *namespace* standar (`Perpustakaan\Repository` dan `Perpustakaan\Model`).
+
+### 2.1. `BookRepository.php` (PHP)
+
+**Analisis & Penjelasan Kode:**
+
+Kontrak antarmuka repositori versi PHP dengan penerapan *strict typing* (`declare(strict_types=1);`). Penulisan tanda tanya di depan tipe data (`?Buku`) menunjukkan bahwa fungsi pencarian mendukung pengembalian nilai `null` apabila entri buku berdasarkan ISBN yang dicari nihil di dalam sistem.
+
+**Keadaan Sebelum Refactoring:**
+
+Seluruh antarmuka dan implementasi masih tercampur di dalam satu file tunggal `repository.php` yang dipenuhi catatan *TODO*.
+
+![repository.php sebelum](/Pertemuan12\img\php\before\RepositoriPHPbefore.png)
+
+**Keadaan Sesudah Refactoring:**
+
+Interface berhasil dipisahkan secara bersih ke dalam file `BookRepository.php`.
+
+![BookRepository.php sesudah](/Pertemuan12\img\php\after\BookReporsitoryPHPafter.png)
+
+---
+
+### 2.2. `InMemoryBookRepository.php` (PHP)
+
+**Analisis & Penjelasan Kode:**
+
+Kelas penyimpanan berbasis array internal PHP yang dideklarasikan dengan modifier `final` agar strukturnya aman dari pewarisan tak terduga. Pemanfaatan operator coalescing (`??`) mempercepat pencarian data ISBN, serta penggunaan `array_values()` memastikan pengembalian kumpulan data koleksi buku tersusun rapi secara berurutan.
+
+**Keadaan Sebelum Refactoring:**
+
+Berada di dalam file monolitik lama tanpa kelengkapan isi logika method penyimpanan.
+
+![repository.php sebelum](/Pertemuan12\img\php\before\RepositoriPHPbefore.png)
+
+**Keadaan Sesudah Refactoring:**
+
+![InMemoryBookRepository.php sesudah](/Pertemuan12\img\php\after\InMemoryBookRepositoryPHPafter.png)
+
+---
+
+### Hasil Eksekusi Program PHP
+
+Pengujian kode melalui skrip utama (`php main.php`) memperlihatkan keseluruhan alur skenario berjalan tanpa kendala:
+- Skenario peminjaman berhasil divalidasi dengan baik (termasuk penolakan stok kosong, pembatasan kuota maksimal peminjaman anggota, serta penolakan ID tak terdaftar).
+- Eksekusi laporan fungsional koleksi buku, pengelompokan berdasarkan penulis, serta mekanisme ekspor data teks ke dalam file laporan eksternal `laporan_buku.txt` tereksekusi secara aman menggunakan blok penanganan sumber daya `finally`.
+
+![Output PHP](/Pertemuan12\img\php\OutputPHP.png)
