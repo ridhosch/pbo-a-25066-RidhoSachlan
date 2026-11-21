@@ -35,13 +35,13 @@ Antarmuka (*interface*) `AturanDenda` bertindak sebagai kontrak utama yang mende
 
 File ini masih menyisakan catatan *TODO* sisa kerangka praktikum serta komentar panduan implementasi kode.
 
-![AturanDenda.java sebelum](/Pertemuan12\img\java\before\AturanDendaJavaBefore.png)
+![AturanDenda.java sebelum](/Pertemuan12/img/java/before/AturanDendaJavaBefore.png)
 
 **Keadaan Sesudah Refactoring:**
 
 Seluruh komentar *TODO* dibersihkan, menghasilkan struktur antarmuka yang bersih, ringkas, dan siap diimplementasikan oleh kelas strategi konkret.
 
-![AturanDenda.java sesudah](/Pertemuan12\img\java\after\AturanDendaJavaAfter.png)
+![AturanDenda.java sesudah](/Pertemuan12/img/java/after/AturanDendaJavaAfter.png)
 
 ---
 
@@ -57,7 +57,7 @@ Merupakan file komponen baru yang ditambahkan pada sesi pertemuan 12 ini.
 
 **Keadaan Sesudah Refactoring:**
 
-![AturanDendaFactory.java sesudah](/Pertemuan12\img\java\after\AturanDendaFactoryAfter.png)
+![AturanDendaFactory.java sesudah](/Pertemuan12/img/java/after/AturanDendaFactoryAfter.png)
 
 ---
 
@@ -73,7 +73,7 @@ Merupakan file komponen baru yang ditambahkan pada sesi pertemuan 12 ini.
 
 **Keadaan Sesudah Refactoring:**
 
-![DendaMahasiswa.java sesudah](/Pertemuan12\img\java\after\DendaMahasiswaJavaAfter.png)
+![DendaMahasiswa.java sesudah](/Pertemuan12/img/java/after/DendaMahasiswaJavaAfter.png)
 
 ---
 
@@ -89,7 +89,7 @@ Merupakan file komponen baru yang ditambahkan pada sesi pertemuan 12 ini.
 
 **Keadaan Sesudah Refactoring:**
 
-![DendaDosen.java sesudah](/Pertemuan12\img\java\after\DendaDosenJavaAfter.png)
+![DendaDosen.java sesudah](/Pertemuan12/img/java/after/DendaDosenJavaAfter.png)
 
 ---
 
@@ -105,7 +105,7 @@ Merupakan file komponen baru yang ditambahkan pada sesi pertemuan 12 ini.
 
 **Keadaan Sesudah Refactoring:**
 
-![DendaBebas.java sesudah](/Pertemuan12\img\java\after\DendaBebasJavaAfter.png)
+![DendaBebas.java sesudah](/Pertemuan12/img/java/after/DendaBebasJavaAfter.png)
 
 ---
 
@@ -121,7 +121,7 @@ Merupakan file komponen baru yang ditambahkan pada sesi pertemuan 12 ini.
 
 **Keadaan Sesudah Refactoring:**
 
-![DendaAlumni.java sesudah](/Pertemuan12\img\java\after\DendaAlumniJavaAfter.png)
+![DendaAlumni.java sesudah](/Pertemuan12/img/java/after/DendaAlumniJavaAfter.png)
 
 ---
 
@@ -135,13 +135,13 @@ Merupakan file komponen baru yang ditambahkan pada sesi pertemuan 12 ini.
 
 Masih berupa kerangka kosong dengan anotasi komentar *TODO*.
 
-![BookRepository.java sebelum](/Pertemuan12\img\java\before\BookRepositoryJavaBefore.png)
+![BookRepository.java sebelum](/Pertemuan12/img/java/before/BookRepositoryJavaBefore.png)
 
 **Keadaan Sesudah Refactoring:**
 
 Kontrak method repositori tersusun lengkap dan terstandarisasi.
 
-![BookRepository.java sesudah](/Pertemuan12\img\java\after\BookRepositoruJavaAfter.png)
+![BookRepository.java sesudah](/Pertemuan12/img/java/after/BookRepositoruJavaAfter.png)
 
 ---
 
@@ -155,13 +155,13 @@ Kelas ini merupakan implementasi nyata dari `BookRepository` yang memanfaatkan s
 
 Masih berupa kerangka kelas mentah dengan struktur penyimpanan peta data yang belum diimplementasikan fungsinya.
 
-![InMemoryBookRepository.java sebelum](/Pertemuan12\img\java\before\InMemoryBookRepositoryJavaBefore.png)
+![InMemoryBookRepository.java sebelum](/Pertemuan12/img/java/before/InMemoryBookRepositoryJavaBefore.png)
 
 **Keadaan Sesudah Refactoring:**
 
 Seluruh logika manipulasi data memori tertulis secara komprehensif.
 
-![InMemoryBookRepository.java sesudah](/Pertemuan12\img\java\after\InMemoryBookRepositoryJavaAfter.png)
+![InMemoryBookRepository.java sesudah](/Pertemuan12/img/java/after/InMemoryBookRepositoryJavaAfter.png)
 
 ---
 
@@ -169,13 +169,13 @@ Seluruh logika manipulasi data memori tertulis secara komprehensif.
 
 Eksekusi perintah Maven (`mvn exec:java`) menampilkan sistem berjalan dengan sukses. Konsole memperlihatkan inisialisasi aktif aturan denda mahasiswa, validasi penolakan peminjaman untuk ID anggota yang belum terdaftar (mekanisme penanganan error berjalan normal), serta keberhasilan penambahan entri buku baru ke dalam sistem repositori.
 
-![Output Java](/Pertemuan12\img\java\OutputJava.png)
+![Output Java](/Pertemuan12/img/java/OutputJava.png)
 
 ---
 
 ## 2. Implementasi Pemrograman Berbasis Objek Berbasis PHP
 
-Pada environment PHP, perbaikan arsitektur kode dilakukan dengan memecah file monolitik (`repository.php`) ke dalam struktur direktori modular `src/Repository` dengan penerapan *namespace* standar (`Perpustakaan\Repository` dan `Perpustakaan\Model`).
+Pada environment PHP, perbaikan arsitektur kode dilakukan dengan memecah file monolitik (`repository.php`) ke dalam struktur direktori modular `src/Repository` dengan penerapan *namespace* standar (`Perpustakaan/Repository` dan `Perpustakaan/Model`).
 
 ### 2.1. `BookRepository.php` (PHP)
 
@@ -187,13 +187,13 @@ Kontrak antarmuka repositori versi PHP dengan penerapan *strict typing* (`declar
 
 Seluruh antarmuka dan implementasi masih tercampur di dalam satu file tunggal `repository.php` yang dipenuhi catatan *TODO*.
 
-![repository.php sebelum](/Pertemuan12\img\php\before\RepositoriPHPbefore.png)
+![repository.php sebelum](/Pertemuan12/img/php/before/RepositoriPHPbefore.png)
 
 **Keadaan Sesudah Refactoring:**
 
 Interface berhasil dipisahkan secara bersih ke dalam file `BookRepository.php`.
 
-![BookRepository.php sesudah](/Pertemuan12\img\php\after\BookReporsitoryPHPafter.png)
+![BookRepository.php sesudah](/Pertemuan12/img/php/after/BookReporsitoryPHPafter.png)
 
 ---
 
@@ -207,11 +207,11 @@ Kelas penyimpanan berbasis array internal PHP yang dideklarasikan dengan modifie
 
 Berada di dalam file monolitik lama tanpa kelengkapan isi logika method penyimpanan.
 
-![repository.php sebelum](/Pertemuan12\img\php\before\RepositoriPHPbefore.png)
+![repository.php sebelum](/Pertemuan12/img/php/before/RepositoriPHPbefore.png)
 
 **Keadaan Sesudah Refactoring:**
 
-![InMemoryBookRepository.php sesudah](/Pertemuan12\img\php\after\InMemoryBookRepositoryPHPafter.png)
+![InMemoryBookRepository.php sesudah](/Pertemuan12/img/php/after/InMemoryBookRepositoryPHPafter.png)
 
 ---
 
@@ -221,4 +221,4 @@ Pengujian kode melalui skrip utama (`php main.php`) memperlihatkan keseluruhan a
 - Skenario peminjaman berhasil divalidasi dengan baik (termasuk penolakan stok kosong, pembatasan kuota maksimal peminjaman anggota, serta penolakan ID tak terdaftar).
 - Eksekusi laporan fungsional koleksi buku, pengelompokan berdasarkan penulis, serta mekanisme ekspor data teks ke dalam file laporan eksternal `laporan_buku.txt` tereksekusi secara aman menggunakan blok penanganan sumber daya `finally`.
 
-![Output PHP](/Pertemuan12\img\php\OutputPHP.png)
+![Output PHP](/Pertemuan12/img/php/OutputPHP.png)
